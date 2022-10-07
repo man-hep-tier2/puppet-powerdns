@@ -1,5 +1,8 @@
 # mysql backend for powerdns
-class powerdns::backends::mysql ($package_ensure = $powerdns::params::default_package_ensure) inherits powerdns {
+class powerdns::backends::mysql (
+  $package_ensure = $powerdns::params::default_package_ensure,
+  $mysql_schema_file = $::powerdns::mysql_schema_file,
+) inherits powerdns {
   # set the configuration variables
   powerdns::config { 'launch':
     ensure  => present,
@@ -72,7 +75,7 @@ class powerdns::backends::mysql ($package_ensure = $powerdns::params::default_pa
       password => $::powerdns::db_password,
       host     => $::powerdns::db_host,
       grant    => [ 'ALL' ],
-      sql      => [$::powerdns::mysql_schema_file],
+      sql      => [$mysql_schema_file],
       require  => Package[$::powerdns::params::mysql_backend_package_name],
     }
   }
