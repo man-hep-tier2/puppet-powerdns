@@ -14,14 +14,14 @@ class powerdns::repo inherits powerdns {
       Yumrepo['powerdns'] -> Package <| title == $::powerdns::params::authoritative_package |>
       Yumrepo['powerdns-recursor'] -> Package <| title == $::powerdns::params::recursor_package |>
 
-      if versioncmp($::operatingsystemmajrelease, '7') <= 0 {
+      if versioncmp($facts['os']['release']['major'], '7') <= 0 {
         ensure_packages('yum-plugin-priorities')
 
         Package['yum-plugin-priorities']
         -> Yumrepo['powerdns']
       }
 
-      if versioncmp($::operatingsystemmajrelease, '8') >= 0 {
+      if versioncmp($facts['os']['release']['major'], '8') >= 0 {
         if ($facts['os']['name'] == 'Rocky') {
           $mirrorlist = "https://mirrors.rockylinux.org/mirrorlist?arch=\$basearch&repo=PowerTools-\$releasever"
           $gpgkey = 'file:///etc/pki/rpm-gpg/RPM-GPG-KEY-rockyofficial'
